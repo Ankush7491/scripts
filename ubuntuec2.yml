@@ -1,0 +1,88 @@
+Parameters:
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - m1.small
+      - m1.large
+  AZ:
+    Description: "Availability zone for devops VM"
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: "us-east-1a"
+  webSecurityGroup:
+    Description: "SecurityGroup for the Ubuntu EC2"
+    Type: List<AWS::EC2::SecurityGroup::Id>
+    Default: "sg-05dbbadee2d4cffa9"
+Mappings:
+  AMIMap:
+    us-east-1:
+      prod: ami-04505e74c0741db8d
+      dev: ami-04505e74c0741db8d
+Resources:
+  UbuntuEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      AdditionalInfo: "Ubuntu EC2 Instance for training"
+      # Affinity: "String"
+      AvailabilityZone: !Ref AZ
+      # BlockDeviceMappings:
+      #   BlockDeviceMappings
+      # CpuOptions:
+      #   CoreCount: Number
+      #   ThreadsPerCore: Number
+      # CreditSpecification:
+      #   CPUCredits: "Number"
+      # DisableApiTermination: false
+      # EbsOptimized: false
+      # ElasticGpuSpecifications:
+      #   ElasticGpuSpecifications
+      # ElasticInferenceAccelerators:
+      #   ElasticInferenceAccelerators
+      # EnclaveOptions:
+      #   Enabled: false
+      # HibernationOptions:
+      #   Configured: false
+      # HostId: "String"
+      # HostResourceGroupArn: "String"
+      # IamInstanceProfile: "String"
+      ImageId: !FindInMap [AMIMap,!Ref "AWS::Region" , dev]
+      # InstanceInitiatedShutdownBehavior: "String"
+      InstanceType: 
+        Ref: InstanceTypeParameter
+      # Ipv6AddressCount: Number
+      # Ipv6Addresses:
+      #   Ipv6Addresses
+      # KernelId: "String"
+      KeyName: "ubuntu"
+      # LaunchTemplate:
+      #   LaunchTemplateId: "String"
+      #   LaunchTemplateName: "String"
+      #   Version: "String"
+      # LicenseSpecifications:
+      #   LicenseSpecifications
+      # Monitoring: String
+      # NetworkInterfaces:
+      #   NetworkInterfaces
+      # PlacementGroupName: "String"
+      # PrivateDnsNameOptions:
+      #   EnableResourceNameDnsAAAARecord: false
+      #   EnableResourceNameDnsARecord: false
+      #   HostnameType: "String"
+      # PrivateIpAddress: "false"
+      # PropagateTagsToVolumeOnCreation: String
+      # RamdiskId: "String"
+      SecurityGroupIds:
+        Ref : webSecurityGroup
+      # SecurityGroups:
+      #   SecurityGroups
+      # SourceDestCheck: false
+      # SsmAssociations:
+      #   SsmAssociations
+      # SubnetId: "String"
+      # Tags:
+      #   Tags
+      # Tenancy: "String"
+      UserData: !Base64 file://"/Users/ankushsharma/Documents/Learning/DevOps/cft/dependencies.txt"
+      # Volumes:
+      #   Volumes
