@@ -1,4 +1,4 @@
-hosts: copyfile
+hosts: all
 become: true
 tasks: 
   - name: copyfile
